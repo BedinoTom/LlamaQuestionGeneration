@@ -8,8 +8,12 @@ from flask import Flask
 loader = TextLoader("./docs/raw.txt")
 docs = loader.load()
 
+print("Doc load !")
+
 text_splitter = CharacterTextSplitter(chunk_overlap=0)
 texts = text_splitter.split_documents(docs)
+
+print("Doc Split !")
 
 _texts = []
 for i in range(len(texts)):
@@ -17,9 +21,15 @@ for i in range(len(texts)):
     
 embeddings = LlamaCppEmbeddings(model_path="./models/llama-7b.ggmlv3.q4_0.bin")
 
+print("Llama Load !")
+
 db = chroma.Chroma.from_documents(texts, embeddings)
 
+print("Chroma Load !")
+
 app = Flask(__name__)
+
+print("Flask Load !")
 
 @app.route("/")
 def hello_world():
